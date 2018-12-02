@@ -551,8 +551,9 @@ pre code {
   width: 100%;
   padding-right: 15px;
   padding-left: 15px;
-  margin-right: auto;
-  margin-left: auto;
+  margin-right: 5px;
+  margin-left: 5px; 
+  margin-top: 1px;
 }
 
 @media (min-width: 576px) {
@@ -4369,7 +4370,7 @@ input[type="button"].btn-block {
 }
 
 .card {
-  position: relative;
+  position: relative; 
   display: -ms-flexbox;
   display: flex;
   -ms-flex-direction: column;
@@ -4380,6 +4381,7 @@ input[type="button"].btn-block {
   background-clip: border-box;
   border: 1px solid rgba(0, 0, 0, 0.125);
   border-radius: 0.25rem;
+  margin-bottom: 5px;
 }
 
 .card > hr {
@@ -7701,7 +7703,7 @@ button.bg-dark:focus {
 
 .pt-5,
 .py-5 {
-  padding-top: 3rem !important;
+  padding-top: 1rem !important;
 }
 
 .pr-5,
