@@ -1,13 +1,15 @@
 .grisClarito { background-color: #f2f6fa; }
 .azulClarito { background-color: #009fe3; }
 .amarillito { color: #feba02; }
-.grisOscurito { background-color: #666; }
+.grisOscurito { color: #666; }
 .back_amarillito { background-color: #feba02; }
-.back_mediumGray{ background-color: #00FFAA; }
-.back_aquaGreen{ background-color: #86959E; }
+.back_aquaGreen{ color: #00FFAA; }
+.back_mediumGray{ background-color: #86959E; }
 
  body {
     background-image:url('../img/plumas2_bg.jpg');
     background-size: cover;
     background-attachment: fixed;
+    overflow: hidden;
+
   }
