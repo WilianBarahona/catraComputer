@@ -11,5 +11,9 @@
     background-size: cover;
     background-attachment: fixed;
     overflow: hidden;
-
   }
+
+  .scroll-y {
+    max-height: 260px;
+    overflow-y: auto;
+}
