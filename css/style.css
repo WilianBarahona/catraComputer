@@ -10,7 +10,7 @@
     background-image:url('../img/plumas2_bg.jpg');
     background-size: cover;
     background-attachment: fixed;
-    overflow: hidden;
+    /* overflow: hidden; */
     /* */
   }
 
