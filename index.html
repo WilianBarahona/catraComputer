@@ -65,23 +65,14 @@
                 <div class="card-body">
                   <h5 class="card-title grisOscurito"><b>Entrada</b></h5>
                   <table class="table">
-                    <tbody>
-                      <tr>
-                        <th scope="row">1</th>
-                        <td>+10001</td>
-                      </tr>
-                      <tr>
-                        <th scope="row">2</th>
-                        <td>+10002</td>
-                      </tr>
-                      <tr>
-                        <th scope="row">3</th>
-                        <td>+10003</td>
-                      </tr>
+                    <tbody id="tInstrucciones">
                     </tbody>
                   </table>
-                  <label class="btn btn-default btn-file azulClarito">
-                    Leer instrucciones<input type="file" style="display: none;">
+                  <label id='bInstrucciones' class="btn btn-default btn-file azulClarito">
+                    Leer instrucciones <input id="fInstrucciones" type="file" style="display: none;">
+                  </label>
+				  <label id='bCargarInst' class="btn btn-warning">
+                    Cargar instrucciones
                   </label>
                 </div>
               </div>
