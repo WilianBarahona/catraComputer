@@ -2913,6 +2913,7 @@ fieldset:disabled a.btn {
   font-size: 0.875rem;
   line-height: 1.5;
   border-radius: 0.2rem;
+  margin-bottom: 2px;
 }
 
 .btn-block {
@@ -4382,7 +4383,7 @@ input[type="button"].btn-block {
   border: 1px solid rgba(0, 0, 0, 0.125);
   border-radius: 0.25rem;
   margin-bottom: 5px;
-  opacity: 0.8;
+  opacity: 0.9;
 }
 
 .card > hr {

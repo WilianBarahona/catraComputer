@@ -13,11 +13,28 @@
     /* overflow: hidden; */
   }
 
-.scroll-y {
-    max-height: 260px;
+.scroll-y-fixed{
+    height: 261px;
     overflow-y: auto;
 }
 
-.btn-file:hover {
-   background-color: #0387c0;
+.btn-debug{
+   margin-top: 8px;
+}
+
+.contenedor{
+    position: relative;
+    display: inline-block;
+    text-align: center;
+}
+ 
+.centrado{
+    color: #d4d10d;
+    /* color: #feba02; */
+    font-weight: bold;
+    position: absolute;
+    top: 55%;
+    left: 59%;
+    transform: translate(-50%, -50%);
+    font-size: 26px
 }
