@@ -1,6 +1,5 @@
-// Codigo de catraComputer
-var puedeCargar=0;
-//################################CODIGO PARA LEER DOCUMENTO###############################################################
+//##################CODIGO PARA LEER DOCUMENTO########################
+var puedeCargar = 0;
 document.getElementById('fInstrucciones').addEventListener('change', leerArchivo, false);
 
 function leerArchivo(e) {
