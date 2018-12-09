@@ -30,6 +30,12 @@ var ir = 0
 
 var ac = 0;
 
+// arreglos temporales para bifurcaciones
+tempUbicaciones= Array();
+tempInstrucciones= Array();
+
+
+
 //Leer Archivo 
 $("#fInstrucciones").change(function (e){
     limpiarTodo();
@@ -62,7 +68,7 @@ function validarInstrucicones(contenido) {
           contenidoError = contenidoError + " " + (i+1) + ". "  + errores[i] + "<br/>";
        }
        $.confirm({
-           title : "!ERROR!",
+           title: "console.log(6)!ERROR!",
            content: contenidoError,
         //    icon: 'fa fa-exclamation-triangle',
            theme: 'black',
@@ -188,7 +194,6 @@ function ejecutarInstruccion(instruccion, index) {
     *array getInstruccion[]-->Guarda los operadores opCoder(suma,resta,multiplicacion ,...);
     *array ubicaciones[] --> Almacena todas las ubicaciones de las instrucciones en el la ejecucion actual.
 
-
     */
     switch (instruccion) {
         case 10:
@@ -231,33 +236,73 @@ function ejecutarInstruccion(instruccion, index) {
         case 32:
             // Divide una palabra de una ubicación específica de
             // memoria entre la palabra en el acumulador 
-            
+            divAC(ubicaciones[index], index)
+            actualizarRegistros(index)
             break;
         case 33:
             // Multiplica una palabra de una ubicación específica de
             // memoria por la palabra en el acumulador 
-            
+            multcaAC(ubicaciones[index], index)
+            actualizarRegistros(index)
             break;
         case 40:
-            // Bifurca hacia una ubicación específica de memoria.
-            
+            // Bifurca hacia una ubicación específica de memoria si el acumulador es positivo.
+            console.log(6)
+            if(comprobarEntrada()==40){
+                bifurcaPositivo(ubicaciones[index], index)
+                ejecutarInstrucciones(true);
+                
+            }
             break;
         case 41:
             // Bifurca hacia una ubicación específica de memoria si el
             // acumulador es negativo.
-            
+            if (comprobarEntrada()==41){
+
+            }
             break;
         case 42:
             // Bifurca hacia una ubicación específica de memoria si el
             // acumulador es cero.
+            if (comprobarEntrada()==42){
+
+            }
             
             break;
         case 43:
             // Alto , el programa completo su tarea.
-
+            actualizarRegistros(index)
+            ejecutarInstruccion.finish();
             break;
     }
 
+}
+
+function bifurcaPositivo(posicion,index) {
+    if (ubicaciones[index] >= instrucciones.length) { //Validar que el dato leido se carge en el area de datos
+        console.log("dentro")
+        alert("Error posicion de memoria invalida, Area de Instrucciones: " + instrucciones[index])
+        actualizarRegistros(index)
+        bifurcaPositivo.finish();
+    } else {
+        console.log("fuera")
+        var j=0;
+        for (var i = ubicaciones[index]; i <= (getInstruccion.length-1);i++){
+            tempUbicaciones[j] = ubicaciones[i];
+            tempInstrucciones[j] = getInstruccion[i];
+            j++;
+        }        
+    }
+}
+
+function comprobarEntrada() {
+    if (ac<0){
+        return 41;
+    }else if (ac==0) {
+        return 42
+    } else {
+        return 40;
+    }
 }
 
 function sumaAC(posicion,index) {
@@ -281,12 +326,25 @@ function restaAC(posicion,index) {
 }
 
 function multcaAC(posicion,index) {
-    
+    if (ubicaciones[index] >= instrucciones.length) { //Validar que el dato leido se carge en el area de datos
+        ac = ac * contenidoMemoria[posicion]
+    } else {
+        alert("Error posicion de memoria invalida, instruccion: " + instrucciones[index])
+        actualizarRegistros(index)
+        multcaAC.finish();
+    }
 }
-function DivAC(posicion,index) {
-    
+function divAC(posicion,index) {
+    if (ubicaciones[index] >= instrucciones.length) { //Validar que el dato leido se carge en el area de datos
+        ac = parseInt(ac / contenidoMemoria[posicion])
+
+    } else {
+        alert("Error posicion de memoria invalida, instruccion: " + instrucciones[index])
+        actualizarRegistros(index)
+        divAC.finish();
 }
 
+}
 
 
 
@@ -304,6 +362,7 @@ function cargarAlAC(posicion,index) {
 function cargarDelAC(posicion,index) {
     if (ubicaciones[index] >= instrucciones.length) { //Validar que el dato leido se carge en el area de datos
         contenidoMemoria[posicion]=ac
+        $("#contenido-"+ posicion).html(ac)
     } else {
         alert("Error posicion de memoria invalida, instruccion: " + instrucciones[index])
         actualizarRegistros(index)
@@ -312,9 +371,14 @@ function cargarDelAC(posicion,index) {
 }
 
 //Ejecutar todas las instrucciones en un solo paso
-function ejecutarInstrucciones() {
+function ejecutarInstrucciones(stop) {
     for (var i = 0; i < getInstruccion.length; i++) {
-      ejecutarInstruccion(getInstruccion[i], i);
+        if (stop){
+            i=getInstruccion.length+1
+        }else{
+            ejecutarInstruccion(getInstruccion[i], i);
+        }
+
     }
 }
 
@@ -394,6 +458,8 @@ function limpiaraArrays() {
     ubicaciones = Array();
     getInstruccion = Array();
     contenidoMemoria = Array();
+    //Variables globales de control de programa
+
 }
 
 function limpiarTodo() {
@@ -410,4 +476,9 @@ $("#btn-limpiar").click(function () {
     limpiarTodo()
     $("#btn-ejecutar").attr("disabled", false)
     $("#chk-debug").attr("disabled", false)
+    pc = -1;
+    irArray = Array();
+    irArray.push("+00000") //Inicializar ir con 0
+    ir = 0
+    ac = 0;
 })
