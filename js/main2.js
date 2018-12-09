@@ -21,9 +21,14 @@ var getInstruccion = Array(); // copia de todas las instrucciones para matipulac
 var contenidoMemoria = Array(); //Guarda el contenido de la memoria
 
 //Variables globales de control de programa
-var pc = 0;
-var ir = 0;
+var pc = -1;
+
+var irArray= Array();
+irArray.push("+00000") //Inicializar ir con 0
+var ir = 0
+
 var ac = 0;
+
 //Leer Archivo 
 $("#fInstrucciones").change(function (e){
     limpiarTodo();
@@ -104,6 +109,10 @@ function cargarInstruccionesMemoria() {
             '</td>' +
             '</tr>'
         );
+        if (i<(instrucciones.length-1)) {
+            irArray.push(instrucciones[i])
+        }
+
     }
     for (var i= instrucciones.length; i <= max; i++) {
         var elemento = document.getElementById('cmInstrucciones');
@@ -185,11 +194,19 @@ function ejecutarInstruccion(instruccion, index) {
             // Lee una palabra desde el teclado y la introduce en una
             // ubicación específica de memoria --> ubicacion[index]
             leerDato(ubicaciones[index]);
+            pc = pc + 1
+            ir = irArray[index]
+            cargarHtmlRegistro(pc,ir,ac)
+            cargarHtmlEjecucion(pc, ir, ac)
             break;
         case 11:
             // Escribe una palabra de una ubicación específica de
             // memoria y la imprime en la pantalla
             imprimirPantalla(ubicaciones[index])
+            pc = pc +1
+            ir = irArray[index]
+            cargarHtmlRegistro(pc, ir, ac)
+            cargarHtmlEjecucion(pc, ir, ac)
             break;
         case 20:
             // Carga una palabra de una ubicación específica de
@@ -275,9 +292,26 @@ function cargarHtmlMemoria(ubicacion, contenido) {
 }
 
 function cargarHtmlRegistro(pc, ir, ac) {
-    $("#ac").html(pc)
-    $("#pc").html(ir)
-    $("#ir").html(ac)
+    $("#ac").html(ac)
+    $("#pc").html(pc)
+    $("#ir").html(ir)
+}
+
+function cargarHtmlEjecucion(pc, ir, ac) {
+    var elemento = document.getElementById('tEjecucion');
+    elemento.insertAdjacentHTML('beforeend',
+        '<tr>' +
+            '<td>' +
+              pc +
+            '</td>' +
+            '<td>' +
+             ir +
+            '</td>' +
+            '<td>' +
+             ac +
+            '</td>' +
+        '</tr>'
+    );  
 }
 
 function limpiaraArrays() {
@@ -293,9 +327,10 @@ function limpiarTodo() {
     $('#tInstrucciones').empty();
     $('#cmInstrucciones').empty();
     $("#ac").html("0")
-    $("#pc").html("0")
-    $("#ir").html("0")
+    $("#pc").html("+000")
+    $("#ir").html("+00000")
     $("#resultado").html("0")
+    $("#tEjecucion").empty()
 }
 $("#btn-limpiar").click(function () {
     limpiarTodo()

@@ -86,7 +86,17 @@
                 <img class="card-img-top" src="" alt="">
                 <div class="card-body">
                   <h5 class="card-title grisOscurito"><b>Ejecucion</b></h5>
-                  <p class="card-text">Mostrar como se mueven los procesos PC, Instruccion, memoria</p>
+                  <table class="table table-striped">
+                    <thead class="head-table-text">
+                        <tr>
+                          <th scope="col">PC</th>
+                          <th scope="col">IR</th>
+                          <th scope="col">AC</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tEjecucion" class="head-table-text">
+                    </tbody>
+                  </table>
                 </div>
               </div>
 
@@ -119,12 +129,12 @@
                 <tr>
                   <th scope="row"><img src="icons/24X24/baleadita.ico" alt=""></th>
                   <td>Contador de </br>Programa</td>
-                  <td id='pc'>0</td>
+                  <td id='pc'>+000</td>
                 </tr>
                 <tr>
                   <th scope="row"><img src="icons/24X24/huevito.ico" alt=""></th>
                   <td>Registro de </br>Instrucciones</td>
-                  <td id='ir'>0</td>
+                  <td id='ir'>+00000</td>
                 </tr>
                 <tr>
                   <th scope="row"><img src="icons/24X24/beans.ico" alt=""></th>
