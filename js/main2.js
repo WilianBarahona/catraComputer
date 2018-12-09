@@ -11,6 +11,7 @@ var regex = /^(\+|\-)(00|10|11|20|21|30|31|32|33|40|41|42|43)([0-9][0-9][0-9])$/
 var regexMemory = /^(\+|\-)((00|10|11|20|21|30|31|32|33|40|41|42|43))/gm;
 
 //Variables globales de salida de la funcion validarInstrucciones
+var max = 0
 var errores = Array(); //Arreglo de instrucciones erroneas
 var instrucciones = Array(); // Arreglo con las instrucciones ya validas
 
@@ -93,7 +94,7 @@ function cargarInstruccionesMemoria() {
     for (var i = 0; i < ubicaciones.length; i++){
         ubicaciones[i] = parseInt(ubicaciones[i].replace(regexMemory, ''));
     }
-    var max = Math.max(...ubicaciones);//obtener la Ubicacion de memoria maxima para agregar al panel de memoria
+    max = Math.max(...ubicaciones);//obtener la Ubicacion de memoria maxima para agregar al panel de memoria
     for (var i = 0; i <= max; i++) {
        contenidoMemoria[i]=0;  
     }
@@ -193,40 +194,39 @@ function ejecutarInstruccion(instruccion, index) {
         case 10:
             // Lee una palabra desde el teclado y la introduce en una
             // ubicación específica de memoria --> ubicacion[index]
-            leerDato(ubicaciones[index]);
-            pc = pc + 1
-            ir = irArray[index]
-            cargarHtmlRegistro(pc,ir,ac)
-            cargarHtmlEjecucion(pc, ir, ac)
+            leerDato(ubicaciones[index],index);
+            actualizarRegistros(index)
+           
             break;
         case 11:
             // Escribe una palabra de una ubicación específica de
             // memoria y la imprime en la pantalla
-            imprimirPantalla(ubicaciones[index])
-            pc = pc +1
-            ir = irArray[index]
-            cargarHtmlRegistro(pc, ir, ac)
-            cargarHtmlEjecucion(pc, ir, ac)
+            imprimirPantalla(ubicaciones[index], index)
+            actualizarRegistros(index)
             break;
         case 20:
             // Carga una palabra de una ubicación específica de
             // memoria y la coloca en el acumulador.
-            
+            cargarAlAC(ubicaciones[index], index)
+            actualizarRegistros(index)
             break;
         case 21:
             // Almacena una palabra del acumulador dentro de una
             // ubicación específica de memoria.
-            
+            cargarDelAC(ubicaciones[index], index)
+            actualizarRegistros(index)
             break;
         case 30:
             // Suma una palabra de una ubicación específica de
             // memoria a la palabra en el acumulador 
-            
+            sumaAC(ubicaciones[index], index)
+            actualizarRegistros(index)
             break;
         case 31:
             // Resta una palabra de una ubicación específica de
             // memoria a la palabra en el acumulador
-            
+            restaAC(ubicaciones[index], index)
+            actualizarRegistros(index)
             break;
         case 32:
             // Divide una palabra de una ubicación específica de
@@ -260,6 +260,57 @@ function ejecutarInstruccion(instruccion, index) {
 
 }
 
+function sumaAC(posicion,index) {
+    if (ubicaciones[index] >= instrucciones.length) { //Validar que el dato leido se carge en el area de datos
+        ac = ac + contenidoMemoria[posicion]
+    } else {
+        alert("Error posicion de memoria invalida, instruccion: " + instrucciones[index])
+        actualizarRegistros(index)
+        sumaAC.finish();
+    }
+}
+
+function restaAC(posicion,index) {
+    if (ubicaciones[index] >= instrucciones.length) { //Validar que el dato leido se carge en el area de datos
+        ac = ac - contenidoMemoria[posicion]
+    } else {
+        alert("Error posicion de memoria invalida, instruccion: " + instrucciones[index])
+        actualizarRegistros(index)
+        restaAC.finish();
+    }
+}
+
+function multcaAC(posicion,index) {
+    
+}
+function DivAC(posicion,index) {
+    
+}
+
+
+
+
+function cargarAlAC(posicion,index) {
+    if (ubicaciones[index] >= instrucciones.length) { //Validar que el dato leido se carge en el area de datos
+        ac= contenidoMemoria[posicion]
+        $("#ac").html(ac)
+    } else {
+        alert("Error posicion de memoria invalida, instruccion: " + instrucciones[index])
+        actualizarRegistros(index)
+        cargarAlAC.finish();
+    }
+}
+
+function cargarDelAC(posicion,index) {
+    if (ubicaciones[index] >= instrucciones.length) { //Validar que el dato leido se carge en el area de datos
+        contenidoMemoria[posicion]=ac
+    } else {
+        alert("Error posicion de memoria invalida, instruccion: " + instrucciones[index])
+        actualizarRegistros(index)
+        cargarDelAC.finish();
+    }
+}
+
 //Ejecutar todas las instrucciones en un solo paso
 function ejecutarInstrucciones() {
     for (var i = 0; i < getInstruccion.length; i++) {
@@ -269,22 +320,45 @@ function ejecutarInstrucciones() {
 
 $("#btn-ejecutar").click(function () {
     ejecutarInstrucciones()
+    $("#btn-ejecutar").attr("disabled",true)
+    $("#chk-debug").attr('disabled',true)
     
 })
 
-function leerDato(posicion){
+function leerDato(posicion,index){
     var datoLeido = parseInt(prompt('Ingrese dato(0,1,2,...)'));
-    if (isNaN(datoLeido) || !datoLeido || !(datoLeido % 1 == 0)) {
+    if (isNaN(datoLeido)) {
       alert("ingrese un dato valido");
-      leerDato(posicion);
+      leerDato(posicion, index);
     }else{
-        contenidoMemoria[posicion] = datoLeido;
-        cargarHtmlMemoria(posicion,datoLeido);
+        if(ubicaciones[index]>=instrucciones.length){ //Validar que el dato leido se carge en el area de datos
+            contenidoMemoria[posicion] = datoLeido;
+            cargarHtmlMemoria(posicion, datoLeido);
+        }else{
+            alert("Error posicion invalida, instruccion: "+ instrucciones[index])
+            actualizarRegistros(index)
+            leerDato.finish();
+        }
+        
     }
 }
 
-function imprimirPantalla(ubicacion) {
-    $("#resultado").html(contenidoMemoria[ubicacion])
+function imprimirPantalla(ubicacion,index) {
+    if (ubicaciones[index] >= instrucciones.length) { //Validar que el dato leido se carge en el area de datos
+        $("#resultado").html(contenidoMemoria[ubicacion])
+    } else {
+        alert("Error posicion de memoria invalida, instruccion: " + instrucciones[index])
+        actualizarRegistros(index)
+        imprimirPantalla.finish();
+    }
+ 
+}
+
+function actualizarRegistros(index) {
+    pc = pc + 1
+    ir = irArray[index]
+    cargarHtmlRegistro(pc, ir, ac)
+    cargarHtmlEjecucion(pc, ir, ac)
 }
 
 function cargarHtmlMemoria(ubicacion, contenido) {
@@ -334,4 +408,6 @@ function limpiarTodo() {
 }
 $("#btn-limpiar").click(function () {
     limpiarTodo()
+    $("#btn-ejecutar").attr("disabled", false)
+    $("#chk-debug").attr("disabled", false)
 })
