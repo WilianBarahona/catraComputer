@@ -69,15 +69,15 @@
                   <label id='bInstrucciones' class="btn btn-file btn-sm btn-outline-success">
                     Leer instrucciones <input id="fInstrucciones" type="file" style="display: none;">
                   </label>
-                  <button id='bCargarInst' class="btn btn-outline-warning btn-sm" type="button">Cargar Instrucciones</button>
+                  <button id='bCargarInst' style="display: none;" class="btn btn-outline-warning btn-sm" type="button" >Cargar Instrucciones</button>
                   <table class="table">
-                    <thead>
+                    <thead class='head-table-text'>
                       <tr>
                         <th scope="col">No.</th>
                         <th scope="col">Instruccion</th>
                       </tr>
                     </thead>
-                    <tbody id="tInstrucciones">
+                    <tbody id="tInstrucciones" class="head-table-text">
                     </tbody>
                   </table>
                 </div>
@@ -99,7 +99,7 @@
                 <h5 class="card-title amarillito"><b>Salida</b></h5>
                 <div class="contenedor">
                   <img src="icons/128x128/avocado9(1).ico" style="margin-left:18px;" />
-                  <div class="centrado">200</div>
+                  <div class="centrado" id="resultado">200</div>
                 </div>
                 <a style="margin-left:18px" href="#" class="btn btn-dark">Limpiar</a>
                 <a href="#" class="btn btn-warning">Ejecutar</a>
@@ -119,17 +119,17 @@
                 <tr>
                   <th scope="row"><img src="icons/24X24/baleadita.ico" alt=""></th>
                   <td>Contador de </br>Programa</td>
-                  <td>+000</td>
+                  <td id='pc'>+000</td>
                 </tr>
                 <tr>
                   <th scope="row"><img src="icons/24X24/huevito.ico" alt=""></th>
                   <td>Registro de </br>Instrucciones</td>
-                  <td>+00000</td>
+                  <td id='ir'>+00000</td>
                 </tr>
                 <tr>
                   <th scope="row"><img src="icons/24X24/beans.ico" alt=""></th>
                   <td> Acumulador</td>
-                  <td>0</td>
+                  <td id='ac'>0</td>
                 </tr>
               </tbody>
             </table>
@@ -140,7 +140,7 @@
               <div class="card-body">
                 <h5 class="card-title grisOscurito"><b>Memoria</b></h5>
               <table class="table table-striped">
-                <thead>
+                <thead class="head-table-text">
                   <tr>
                     <th scope="col">Ubicacion</th>
                     <th scope="col">Contenido</th>
