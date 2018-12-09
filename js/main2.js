@@ -18,10 +18,15 @@ var ubicaciones = Array(); // copia de todas las instrucciones para matipulacion
 
 var getInstruccion = Array(); // copia de todas las instrucciones para matipulacion de datos  
 
+var contenidoMemoria = Array(); //Guarda el contenido de la memoria
+
+//Variables globales de control de programa
+var pc = 0;
+var ir = 0;
+var ac = 0;
 //Leer Archivo 
 $("#fInstrucciones").change(function (e){
-    $('#tInstrucciones').empty();
-    $('#cmInstrucciones').empty();
+    limpiarTodo();
     var archivo = e.target.files[0]; // Guardad archivo subido en esta variable
     var lector = new FileReader();
     lector.onload = function (e) {
@@ -85,16 +90,32 @@ function cargarInstruccionesMemoria() {
     }
     var max = Math.max(...ubicaciones);//obtener la Ubicacion de memoria maxima para agregar al panel de memoria
     for (var i = 0; i <= max; i++) {
+       contenidoMemoria[i]=0;  
+    }
+    for(var i = 0; i<instrucciones.length;i++){
         var elemento = document.getElementById('cmInstrucciones');
         elemento.insertAdjacentHTML('beforeend',
-        '<tr>' +
-            '<th scope="row" id="ubicacion-' + i + '">'+
-              i + 
-            '</th>'+
-            '<td id="contenido-'+ i + '">'+
-               '000'+
-            '</td>'+
-        '</tr>'
+            '<tr>' +
+            '<th scope="row" id="ubicacion-' + i + '">' +
+            i +
+            '</th>' +
+            '<td id="contenido-' + i + '">' +
+            instrucciones[i] +
+            '</td>' +
+            '</tr>'
+        );
+    }
+    for (var i= instrucciones.length; i <= max; i++) {
+        var elemento = document.getElementById('cmInstrucciones');
+        elemento.insertAdjacentHTML('beforeend',
+            '<tr>' +
+            '<th scope="row" id="ubicacion-' + i + '">' +
+            i +
+            '</th>' +
+            '<td id="contenido-' + i + '">' +
+            "0"+
+            '</td>' +
+            '</tr>'
         );
         
     }
@@ -149,7 +170,7 @@ function obtenerInstrucciones(){
      */                                                     
 }
 
-function ejecutarInstruccion(instruccion) {
+function ejecutarInstruccion(instruccion, index) {
     /* 
     Funcion para ejecutar instruccion por instruccion.((Debug)
     datos necesarios estan en las variables globales.
@@ -162,62 +183,61 @@ function ejecutarInstruccion(instruccion) {
     switch (instruccion) {
         case 10:
             // Lee una palabra desde el teclado y la introduce en una
-            // ubicación específica de memoria
-
-            //return;
+            // ubicación específica de memoria --> ubicacion[index]
+            leerDato(ubicaciones[index]);
             break;
         case 11:
             // Escribe una palabra de una ubicación específica de
             // memoria y la imprime en la pantalla
-            // return;
+            imprimirPantalla(ubicaciones[index])
             break;
         case 20:
             // Carga una palabra de una ubicación específica de
             // memoria y la coloca en el acumulador.
-            // return;
+            
             break;
         case 21:
             // Almacena una palabra del acumulador dentro de una
             // ubicación específica de memoria.
-            // return;
+            
             break;
         case 30:
             // Suma una palabra de una ubicación específica de
             // memoria a la palabra en el acumulador 
-            // return;
+            
             break;
         case 31:
             // Resta una palabra de una ubicación específica de
             // memoria a la palabra en el acumulador
-            // return;
+            
             break;
         case 32:
             // Divide una palabra de una ubicación específica de
             // memoria entre la palabra en el acumulador 
-            // return;
+            
             break;
         case 33:
             // Multiplica una palabra de una ubicación específica de
             // memoria por la palabra en el acumulador 
-            // return;
+            
             break;
         case 40:
             // Bifurca hacia una ubicación específica de memoria.
-            // return;
+            
             break;
         case 41:
             // Bifurca hacia una ubicación específica de memoria si el
             // acumulador es negativo.
-            // return;
+            
             break;
         case 42:
             // Bifurca hacia una ubicación específica de memoria si el
             // acumulador es cero.
-            // return;
+            
             break;
         case 43:
             // Alto , el programa completo su tarea.
-            // return;
+
             break;
     }
 
@@ -226,45 +246,57 @@ function ejecutarInstruccion(instruccion) {
 //Ejecutar todas las instrucciones en un solo paso
 function ejecutarInstrucciones() {
     for (var i = 0; i < getInstruccion.length; i++) {
-      ejecutarInstruccion(getInstruccion[i]);
+      ejecutarInstruccion(getInstruccion[i], i);
     }
 }
 
-function leerDato(){
-    $.confirm({
-        title: 'Ingrese un dato: ',
-        content: '' +
-            '<form action="" class="formName">' +
-            '<div class="form-group">' +
-            '<input type="text" placeholder="dato(1,2,3...)" class="name form-control" required />' +
-            '</div>' +
-            '</form>',
-        buttons: {
-            formSubmit: {
-                text: 'Enviar',
-                btnClass: 'btn-yellow',
-                action: function () {
-                    var name = this.$content.find('.name').val();
-                    if (isNaN(name) || !name || !(name % 1 == 0)) {
-                        $.alert('Ingrese un dato valido');
-                        return false;
-                    }
-                    $.alert('Your name is ' + name);
-                }
-            },
-            cancel: function () {
-                //close
-            },
-        },
-        onContentReady: function () {
-            // bind to events
-            var jc = this;
-            this.$content.find('form').on('submit', function (e) {
-                // if the user submits the form by pressing enter in the field.
-                e.preventDefault();
-                jc.$$formSubmit.trigger('click'); // reference the button and click it
-            });
-        }
-    });
+$("#btn-ejecutar").click(function () {
+    ejecutarInstrucciones()
+    
+})
 
+function leerDato(posicion){
+    var datoLeido = parseInt(prompt('Ingrese dato(0,1,2,...)'));
+    if (isNaN(datoLeido) || !datoLeido || !(datoLeido % 1 == 0)) {
+      alert("ingrese un dato valido");
+      leerDato(posicion);
+    }else{
+        contenidoMemoria[posicion] = datoLeido;
+        cargarHtmlMemoria(posicion,datoLeido);
+    }
 }
+
+function imprimirPantalla(ubicacion) {
+    $("#resultado").html(contenidoMemoria[ubicacion])
+}
+
+function cargarHtmlMemoria(ubicacion, contenido) {
+    $("#contenido-"+ubicacion).html(contenido);
+}
+
+function cargarHtmlRegistro(pc, ir, ac) {
+    $("#ac").html(pc)
+    $("#pc").html(ir)
+    $("#ir").html(ac)
+}
+
+function limpiaraArrays() {
+    errores = Array();
+    instrucciones = Array();
+    ubicaciones = Array();
+    getInstruccion = Array();
+    contenidoMemoria = Array();
+}
+
+function limpiarTodo() {
+    limpiaraArrays();
+    $('#tInstrucciones').empty();
+    $('#cmInstrucciones').empty();
+    $("#ac").html("0")
+    $("#pc").html("0")
+    $("#ir").html("0")
+    $("#resultado").html("0")
+}
+$("#btn-limpiar").click(function () {
+    limpiarTodo()
+})
