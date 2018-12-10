@@ -258,16 +258,20 @@ function ejecutarInstruccion(instruccion, index) {
         case 41:
             // Bifurca hacia una ubicación específica de memoria si el
             // acumulador es negativo.
-            // if (ac < 0){
-            //     stop = 41
-            // }
+            if (ac < 0){
+                ejecutarInstruccionesBifurcacion(ubicaciones[index])
+                actualizarRegistros()
+                stop = 41
+            }
             break;
         case 42:
             // Bifurca hacia una ubicación específica de memoria si el
             // acumulador es cero.
-            // if (ac == 0){
-            //     stop == 42
-            // }
+            if (ac == 0){
+                ejecutarInstruccionesBifurcacion(ubicaciones[index])
+                actualizarRegistros()
+                stop == 42
+            }
             
             break;
         case 43:
@@ -294,7 +298,7 @@ function ejecutarInstrucciones() {
 
 function ejecutarInstruccionesBifurcacion(indexInicio) {
     for (var i = indexInicio; i < getInstruccion.length; i++) {
-        if (getInstruccion[i] == 40) {
+        if (getInstruccion[i] == 40 || getInstruccion[i] == 41 ||getInstruccion[i]==42) {
             console.log("stop")
             console.log("ubicacion " + ubicaciones[i])
             console.log("instruccion " + getInstruccion[i])
