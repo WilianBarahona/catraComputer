@@ -30,7 +30,7 @@ var ir = 0
 
 var ac = 0;
 
-var stop = false
+var stop = 0
 
 // arreglos temporales para bifurcaciones
 tempUbicaciones= Array();
@@ -248,24 +248,25 @@ function ejecutarInstruccion(instruccion, index) {
         case 40:
             // Bifurca hacia una ubicación específica de memoria si el acumulador es positivo.
             // console.log(6)
-            // if(comprobarEntrada()==40){
-            //     bifurcaPositivo(ubicaciones[index], index)
-            //     ejecutarInstrucciones(true);
-                
+            // if (ac < 0) {
+            //   stop = 40
             // }
+            stop = 40
+            ejecutarInstruccionesBifurcacion(ubicaciones[index])
+            actualizarRegistros()
             break;
         case 41:
             // Bifurca hacia una ubicación específica de memoria si el
             // acumulador es negativo.
-            // if (comprobarEntrada()==41){
-
+            // if (ac < 0){
+            //     stop = 41
             // }
             break;
         case 42:
             // Bifurca hacia una ubicación específica de memoria si el
             // acumulador es cero.
-            // if (comprobarEntrada()==42){
-
+            // if (ac == 0){
+            //     stop == 42
             // }
             
             break;
@@ -277,7 +278,35 @@ function ejecutarInstruccion(instruccion, index) {
     }
 
 }
+//Ejecutar todas las instrucciones en un solo paso
+function ejecutarInstrucciones() {
+    for (var i = 0; i < getInstruccion.length; i++) {
+        if (stop == 40 || stop == 41 || stop == 42) {
+            console.log("stop")
+            return
+        } else {
+            ejecutarInstruccion(getInstruccion[i], i);
+            console.log(getInstruccion[i])
+        }
 
+    }
+}
+
+function ejecutarInstruccionesBifurcacion(indexInicio) {
+    for (var i = indexInicio; i < getInstruccion.length; i++) {
+        if (getInstruccion[i] == 40) {
+            console.log("stop")
+            console.log("ubicacion " + ubicaciones[i])
+            console.log("instruccion " + getInstruccion[i])
+            ejecutarInstruccion(getInstruccion[i], i);
+            return
+        } else {
+            ejecutarInstruccion(getInstruccion[i], i);
+            console.log(getInstruccion[i])
+        }
+
+    }
+}
 function bifurcaPositivo(posicion,index) {
     if (ubicaciones[index] >= instrucciones.length) { //Validar que el dato leido se carge en el area de datos
         console.log("dentro")
@@ -368,17 +397,6 @@ function cargarDelAC(posicion,index) {
     }
 }
 
-//Ejecutar todas las instrucciones en un solo paso
-function ejecutarInstrucciones() {
-    for (var i = 0; i < getInstruccion.length; i++) {
-        if (stop){
-            i=getInstruccion.length+10
-        }else{
-            ejecutarInstruccion(getInstruccion[i], i);
-        }
-
-    }
-}
 
 $("#btn-ejecutar").click(function () {
     ejecutarInstrucciones()
