@@ -22,7 +22,7 @@ var getInstruccion = Array(); // copia de todas las instrucciones para matipulac
 var contenidoMemoria = Array(); //Guarda el contenido de la memoria
 
 //Variables globales de control de programa
-var pc = -1;
+var pc = 0;
 
 var irArray= Array();
 irArray.push("+00000") //Inicializar ir con 0
@@ -30,11 +30,11 @@ var ir = 0
 
 var ac = 0;
 
+var stop = false
+
 // arreglos temporales para bifurcaciones
 tempUbicaciones= Array();
 tempInstrucciones= Array();
-
-
 
 //Leer Archivo 
 $("#fInstrucciones").change(function (e){
@@ -247,26 +247,26 @@ function ejecutarInstruccion(instruccion, index) {
             break;
         case 40:
             // Bifurca hacia una ubicación específica de memoria si el acumulador es positivo.
-            console.log(6)
-            if(comprobarEntrada()==40){
-                bifurcaPositivo(ubicaciones[index], index)
-                ejecutarInstrucciones(true);
+            // console.log(6)
+            // if(comprobarEntrada()==40){
+            //     bifurcaPositivo(ubicaciones[index], index)
+            //     ejecutarInstrucciones(true);
                 
-            }
+            // }
             break;
         case 41:
             // Bifurca hacia una ubicación específica de memoria si el
             // acumulador es negativo.
-            if (comprobarEntrada()==41){
+            // if (comprobarEntrada()==41){
 
-            }
+            // }
             break;
         case 42:
             // Bifurca hacia una ubicación específica de memoria si el
             // acumulador es cero.
-            if (comprobarEntrada()==42){
+            // if (comprobarEntrada()==42){
 
-            }
+            // }
             
             break;
         case 43:
@@ -346,8 +346,6 @@ function divAC(posicion,index) {
 
 }
 
-
-
 function cargarAlAC(posicion,index) {
     if (ubicaciones[index] >= instrucciones.length) { //Validar que el dato leido se carge en el area de datos
         ac= contenidoMemoria[posicion]
@@ -371,10 +369,10 @@ function cargarDelAC(posicion,index) {
 }
 
 //Ejecutar todas las instrucciones en un solo paso
-function ejecutarInstrucciones(stop) {
+function ejecutarInstrucciones() {
     for (var i = 0; i < getInstruccion.length; i++) {
         if (stop){
-            i=getInstruccion.length+1
+            i=getInstruccion.length+10
         }else{
             ejecutarInstruccion(getInstruccion[i], i);
         }
@@ -419,7 +417,7 @@ function imprimirPantalla(ubicacion,index) {
 }
 
 function actualizarRegistros(index) {
-    pc = pc + 1
+    pc = index
     ir = irArray[index]
     cargarHtmlRegistro(pc, ir, ac)
     cargarHtmlEjecucion(pc, ir, ac)
