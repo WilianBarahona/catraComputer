@@ -1,0 +1,30 @@
+/*
+-------------------------------------------------------
+-----------ARQUITECTURA CATRACOMPUTER------------------
+-------------------------------------------------------
+*/
+
+FUNCIONAMIENTO
+----------------
+En la carpeta programs se proporcionan 5 programas, para probar la arquitectura
+1. sumar dos numeros enteros.
+2. restar dos numeros enteros.
+3. multiplicar dos numeros enteros.
+4. dividir dos numeros enteros(el resultado es entero)
+5. obtener el mayor de dos numeros enteros
+
+PASOS
+-------
+1. Leer los archivos de la carpeta programs, el que deseemos ejecutar
+2. Dar click en el boton ejecutar, en caso de error, aparecera un alert
+con las lineas de codificacion mal escritas.
+3. En cuanto a las lineas de codigo es necesarias escribirlas en el siguiente
+formato:
+    *Al inicio con un (+ | -)
+    *Seguidamente el opCode(10 |11 |20 |21 |30 |31 |32 |33 |40 |41 |42 |43)
+    *Luego la ubicacion de memoria del 000-999 
+    (la arquitectura solo consta de 1000 posiciones de memoria)
+    *LA ULTIMA INSTRUCCION DE TODO PROGRAMA PARA QUE FUNCIONE CORRECTAMENTE
+    DEBE DE SER PARAR +43000 
+    *Ejemplos de instrucciones correctas: +10009, -20009,....
+    *Ejemplos de instrucciones Erroneas: 10009, 200009, 20009, 219, etc
