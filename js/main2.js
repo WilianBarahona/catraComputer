@@ -1,6 +1,5 @@
 /*
 ------------Proyecto CatraComputer---------------
-
 */
 
 //------------VARIABLES GOLBALES----------------
@@ -31,11 +30,6 @@ var ir = 0
 var ac = 0;
 
 var stop = 0
-
-// arreglos temporales para bifurcaciones
-tempUbicaciones= Array();
-tempInstrucciones= Array();
-
 //Leer Archivo 
 $("#fInstrucciones").change(function (e){
     limpiarTodo();
@@ -47,6 +41,7 @@ $("#fInstrucciones").change(function (e){
     };
     lector.readAsText(archivo);
     $("#fInstrucciones").val('');
+    $("#btn-ejecutar").attr("disabled", false)
 })
 
 // Validar Instrucciones
@@ -68,7 +63,7 @@ function validarInstrucicones(contenido) {
           contenidoError = contenidoError + " " + (i+1) + ". "  + errores[i] + "<br/>";
        }
        $.confirm({
-           title: "console.log(6)!ERROR!",
+           title: "!ERROR!",
            content: contenidoError,
         //    icon: 'fa fa-exclamation-triangle',
            theme: 'black',
@@ -160,7 +155,6 @@ function cargarInstruccionesEntrada() {
     cargarInstruccionesMemoria();
 }
 
-
 function obtenerInstrucciones(){
     //Copiar arreglo instrucciones en getInstrucciones
     for (var i = 0; i < instrucciones.length; i++) {
@@ -246,12 +240,9 @@ function ejecutarInstruccion(instruccion, index) {
             actualizarRegistros(index)
             break;
         case 40:
-            // Bifurca hacia una ubicación específica de memoria si el acumulador es positivo.
-            // console.log(6)
-            // if (ac < 0) {
-            //   stop = 40
-            // }
+            // Bifurca hacia una ubicación específica de memoria sin importar la condicion de ac
             stop = 40
+            bifurcaValidar(ubicaciones[index], index)
             ejecutarInstruccionesBifurcacion(ubicaciones[index])
             actualizarRegistros()
             break;
@@ -259,8 +250,9 @@ function ejecutarInstruccion(instruccion, index) {
             // Bifurca hacia una ubicación específica de memoria si el
             // acumulador es negativo.
             if (ac < 0){
+                bifurcaValidar(ubicaciones[index], index)
                 ejecutarInstruccionesBifurcacion(ubicaciones[index])
-                actualizarRegistros()
+                // actualizarRegistros()
                 stop = 41
             }
             break;
@@ -268,6 +260,7 @@ function ejecutarInstruccion(instruccion, index) {
             // Bifurca hacia una ubicación específica de memoria si el
             // acumulador es cero.
             if (ac == 0){
+                bifurcaValidar(ubicaciones[index], index)
                 ejecutarInstruccionesBifurcacion(ubicaciones[index])
                 actualizarRegistros()
                 stop == 42
@@ -282,15 +275,15 @@ function ejecutarInstruccion(instruccion, index) {
     }
 
 }
+
 //Ejecutar todas las instrucciones en un solo paso
 function ejecutarInstrucciones() {
     for (var i = 0; i < getInstruccion.length; i++) {
         if (stop == 40 || stop == 41 || stop == 42) {
-            console.log("stop")
+            ejecutarInstruccion(getInstruccion[i], i);
             return
         } else {
             ejecutarInstruccion(getInstruccion[i], i);
-            console.log(getInstruccion[i])
         }
 
     }
@@ -299,33 +292,20 @@ function ejecutarInstrucciones() {
 function ejecutarInstruccionesBifurcacion(indexInicio) {
     for (var i = indexInicio; i < getInstruccion.length; i++) {
         if (getInstruccion[i] == 40 || getInstruccion[i] == 41 ||getInstruccion[i]==42) {
-            console.log("stop")
-            console.log("ubicacion " + ubicaciones[i])
-            console.log("instruccion " + getInstruccion[i])
             ejecutarInstruccion(getInstruccion[i], i);
             return
         } else {
             ejecutarInstruccion(getInstruccion[i], i);
-            console.log(getInstruccion[i])
         }
 
     }
 }
-function bifurcaPositivo(posicion,index) {
+function bifurcaValidar(posicion,index) {
     if (ubicaciones[index] >= instrucciones.length) { //Validar que el dato leido se carge en el area de datos
-        console.log("dentro")
         alert("Error posicion de memoria invalida, Area de Instrucciones: " + instrucciones[index])
         actualizarRegistros(index)
         bifurcaPositivo.finish();
-    } else {
-        console.log("fuera")
-        var j=0;
-        for (var i = ubicaciones[index]; i <= (getInstruccion.length-1);i++){
-            tempUbicaciones[j] = ubicaciones[i];
-            tempInstrucciones[j] = getInstruccion[i];
-            j++;
-        }        
-    }
+    } 
 }
 
 function comprobarEntrada() {
@@ -401,11 +381,12 @@ function cargarDelAC(posicion,index) {
     }
 }
 
-
 $("#btn-ejecutar").click(function () {
-    ejecutarInstrucciones()
-    $("#btn-ejecutar").attr("disabled",true)
+    $("#btn-ejecutar").attr("disabled", true)
     $("#chk-debug").attr('disabled',true)
+    $("#tEjecucion").empty()
+    ejecutarInstrucciones()
+  
     
 })
 
@@ -492,6 +473,7 @@ function limpiarTodo() {
     $("#resultado").html("0")
     $("#tEjecucion").empty()
 }
+
 $("#btn-limpiar").click(function () {
     limpiarTodo()
     $("#btn-ejecutar").attr("disabled", false)
