@@ -1,7 +1,7 @@
 # catraComputer
 Architecture Project
 
-INTEGRANTES
+# Integrantes
 Wilian Rolando Barahona
 Alejandra Nunez
 Kevin Maradiaga
