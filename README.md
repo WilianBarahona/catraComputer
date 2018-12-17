@@ -4,7 +4,7 @@ Architecture Project
 ## Integrantes
 - Wilian Rolando Barahona
 - Alejandra Nunez
-- Kevin Maradiaga
+- Rene Hernandez
 
 
 ## Funcionamiento
