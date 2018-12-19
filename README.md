@@ -1,7 +1,7 @@
 # catraComputer
 Architecture Project
 
-# Sitio Web
+## Sitio Web
 http://catracomputerarquitectura.epizy.com/
 
 ## Integrantes
